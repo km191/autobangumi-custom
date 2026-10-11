@@ -1,0 +1,96 @@
+{
+  "_说明": [
+    "把下面 plugins 段的内容合并进 config/config.json 的 plugins 字段。",
+    "allow_unsigned 必须为 true（这四个是本地未签名插件）。",
+    "enabled 里逐个打开；options 里的地址/密钥请改成你自己的。",
+    "slots 决定用哪个插件接管对应能力。"
+  ],
+  "plugins": {
+    "allow_unsigned": true,
+    "enabled": {
+      "quality-wash": true,
+      "autoscan-push": true,
+      "emby-ingest-notify": true,
+      "notify-relay": true,
+      "hardlink": false,
+      "media-server-refresh": false
+    },
+    "slots": {
+      "downloader": "default",
+      "rename_strategy": "advance",
+      "conflict_policy": "quality-wash",
+      "media_files": "default"
+    },
+    "options": {
+      "quality-wash": {
+        "enabled": true,
+        "groups": [
+          "喵萌奶茶屋",
+          "绿茶字幕组"
+        ],
+        "bottom_groups": [
+          "LoliHouse",
+          "ANi",
+          "Nix-Raws"
+        ],
+        "language_order": [
+          "简繁",
+          "简",
+          "繁",
+          "日",
+          "未知"
+        ],
+        "ani_always_traditional": true,
+        "allow_resolution_downgrade": false,
+        "replace_on_conflict": true,
+        "skip_unknown_group": true,
+        "known_library_guard": true,
+        "emby_url": "http://<Emby地址>:8096",
+        "emby_token": "<Emby API Key>",
+        "library_scan_hours": 6.0,
+        "hold_new_subscriptions": false,
+        "notify": false,
+        "sweep_enabled": true,
+        "sweep_dry_run": true
+      },
+      "autoscan-push": {
+        "url": "http://host.docker.internal:3030",
+        "path_from": "E:\\<媒体根目录>",
+        "path_to": "/mnt/<挂载名>",
+        "push_anime_root": true,
+        "cooldown_minutes": 10.0,
+        "dedup_hours": 12.0,
+        "username": "",
+        "password": "",
+        "timeout": 10.0
+      },
+      "emby-ingest-notify": {
+        "emby_url": "http://<Emby地址>:8096",
+        "emby_token": "<Emby API Key>",
+        "telegram_token": "<Telegram Bot Token>",
+        "telegram_chat_id": "<Telegram Chat ID>",
+        "wait_seconds": 180,
+        "poll_interval": 10.0,
+        "include_overview": true,
+        "include_tags": true,
+        "overview_limit": 180,
+        "tag_limit": 5,
+        "min_episode": 1,
+        "publish_inbox": false
+      },
+      "notify-relay": {
+        "telegram_token": "<Telegram Bot Token>",
+        "telegram_chat_id": "<Telegram Chat ID>",
+        "drop_episode": true,
+        "prepend_title": true,
+        "timeout": 30.0
+      }
+    }
+  },
+  "_通知渠道": [
+    "notification.providers 里把自带的 telegram 关掉、加一个 relay 渠道：",
+    "  {\"type\": \"telegram\", \"enabled\": false},",
+    "  {\"type\": \"relay\", \"enabled\": true}",
+    "否则 AB 自带的「重命名完成」通知会和入库通知重复。"
+  ]
+}

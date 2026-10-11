@@ -1,0 +1,9 @@
+[plugin]
+id = "emby-ingest-notify"
+name = "入库通知"
+version = "0.1.0"
+sdk = ">=0.4,<1"
+entry = "emby_ingest:EmbyIngestNotify"
+description = "整理完成后等 Emby 真正收录该集，再发通知（剧名/集数/集标题/字幕组/类别/剧情 + 海报），Emby 认成别的番时只信 AutoBangumi 的名字"
+authors = ["local"]
+permissions = ["network"]

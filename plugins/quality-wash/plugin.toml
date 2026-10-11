@@ -1,0 +1,16 @@
+[plugin]
+id = "quality-wash"
+name = "质量择优与洗版"
+version = "0.2.0"
+sdk = ">=0.4,<1"
+entry = "quality_wash:QualityWash"
+description = "按字幕组质量层级择优下载与洗版：每集只留最优的一个，更好的版本到达后替换更差的；ANi 永远按繁中处理（最快但质量最差）"
+authors = ["local"]
+permissions = ["network"]
+
+# 在「编辑规则」弹窗里加一个标签页，用来拖动调整同一部番各字幕组的下载顺序
+[[plugin.ui]]
+slot = "bangumi.detail.tab"
+element = "ab-plugin-quality-wash-order"
+entry = "web/order-tab.js"
+title = { zh-CN = "下载顺序", en-US = "Download order" }

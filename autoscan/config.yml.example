@@ -1,0 +1,40 @@
+# autoscan 配置：AutoBangumi 的旁挂刷新服务
+#
+# 工作方式：AB 侧在「整理完成」后把这一部番的目录 POST 到
+#   http://<本机>:3030/triggers/manual?dir=<autoscan 视角的路径>
+# autoscan 做优先级排队 + 合并，然后按路径通知 Emby 扫描
+#   POST /Library/Media/Updated  { "Updates": [{ "path": "...", "updateType": "Created" }] }
+# —— 只影响这一部番的目录，不是整库刷新。
+#
+# 路径有三个视角，必须各自对齐：
+#   AB / 下载器  : <媒体根目录>\<番剧>\Season N      （Windows）
+#   autoscan 容器: /mnt/media/<番剧>/Season N  （本文件里所有路径都用这个）
+#   Emby         : <媒体根目录>\<番剧>\Season N      （Windows，用下面的 target rewrite 换回去）
+
+port: 3030
+
+# 临时调小以便验证；正式使用建议 1m 以上
+minimum-age: 1m
+
+# 可选：给 webhook 加 Basic 认证（开启后 AB 侧插件也要带上同样的用户名密码）
+# authentication:
+#   username: autoscan
+#   password: 改成一个强密码
+
+triggers:
+  # 只保留手动触发器：路径由 AB 侧主动推送。
+  # 端点就是 /triggers/manual（GET 会返回一个网页表单，方便手工测试）
+  manual:
+    priority: 5
+  # 注意：inotify 触发器在 Windows 上没用 —— Docker Desktop 的 Windows 目录挂载
+  # 不会把文件系统事件传进容器，所以这里不启用它。
+
+targets:
+  emby:
+    - url: http://<Emby地址>:8096
+      # Emby 后台 → 设置 → 高级 → API 密钥。若 Emby 换过地址/Key，这里要同步改。
+      token: <Emby API Key>
+      rewrite:
+        # autoscan 容器里的路径 → Emby 看到的路径（Emby 在这台 Windows 上）
+        - from: /mnt/media/
+          to: '<媒体根目录>/'

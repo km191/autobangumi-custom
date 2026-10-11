@@ -1,0 +1,37 @@
+# AutoBangumi 4.0 定制部署（插件 + 补丁 + autoscan）
+#
+# 用法：把 <...> 占位符改成你自己的值，然后 docker compose up -d
+services:
+  auto_bangumi:
+    # 补丁是按这个版本做的；换版本前请先看 patches/README.md 的说明
+    image: ghcr.io/estrellaxd/auto_bangumi:4.0.0-beta.2
+    container_name: auto_bangumi
+    restart: unless-stopped
+    ports:
+      - "7892:7892"
+    volumes:
+      - ./config:/app/config
+      - ./data:/app/data
+      # 三个只读补丁（注释掉任意一行即回到官方行为）
+      - ./patches/database_bangumi.py:/app/module/database/bangumi.py:ro
+      - ./patches/offset_detector.py:/app/module/parser/analyser/offset_detector.py:ro
+      - ./patches/offset_scanner.py:/app/module/core/offset_scanner.py:ro
+    environment:
+      - TZ=Asia/Shanghai
+
+  # 按路径通知 Emby 扫描（不是整库刷新）。Emby 必须先跑起来，否则它启动会失败。
+  autoscan:
+    image: cloudb0x/autoscan:latest
+    container_name: autoscan
+    restart: unless-stopped
+    ports:
+      - "3030:3030"
+    volumes:
+      - ./autoscan:/config
+      # 媒体根目录（只读）；容器内路径要与 autoscan/config.yml 里一致
+      - "E:\\<媒体根目录>:/mnt/media:ro"
+    environment:
+      - TZ=Asia/Shanghai
+      - PUID=1000
+      - PGID=1000
+      - AUTOSCAN_VERBOSITY=1

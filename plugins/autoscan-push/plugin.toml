@@ -1,0 +1,9 @@
+[plugin]
+id = "autoscan-push"
+name = "推送到 autoscan"
+version = "0.1.0"
+sdk = ">=0.4,<1"
+entry = "autoscan_push:AutoscanPush"
+description = "整理完成后把这一部番的目录推给 autoscan，由它按路径通知 Emby / Jellyfin 扫描（只扫那一部番，不整库刷新）"
+authors = ["local"]
+permissions = ["network"]

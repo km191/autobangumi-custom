@@ -1,0 +1,9 @@
+[plugin]
+id = "notify-relay"
+name = "通知中继"
+version = "0.1.0"
+sdk = ">=0.4,<1"
+entry = "notify_relay:NotifyRelay"
+description = "自建通知渠道：丢掉宿主的「重命名完成」单集通知，只转发系统事件（洗版、下载失败、RSS 失败等），文案排版沿用插件那套"
+authors = ["local"]
+permissions = ["network"]

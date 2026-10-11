@@ -1,0 +1,11 @@
+# 运行时数据与配置（含 token / API Key / 数据库），绝不入库
+config/
+data/
+autoscan/autoscan.db
+autoscan/activity.log
+*.db
+*.db-wal
+*.db-shm
+__pycache__/
+*.pyc
+.env
