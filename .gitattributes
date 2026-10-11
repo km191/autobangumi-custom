@@ -1,0 +1,4 @@
+﻿# 统一为 LF：插件跑在 Linux 容器里，Windows 端 clone 也不会整文件变红
+* text=auto eol=lf
+*.png binary
+*.jpg binary
